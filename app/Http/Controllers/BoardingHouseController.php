@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
+
 
 class BoardingHouseController extends Controller implements HasMiddleware
 {
@@ -54,22 +56,20 @@ class BoardingHouseController extends Controller implements HasMiddleware
         ]);
 
         if ($validator->passes()) {
-            // Collect basic data
+
             $data = $request->only(['name', 'address', 'gender']);
 
-            // Handle profile picture
+            $data['user_id'] = Auth::id();
+
             if ($request->hasFile('profile_picture')) {
                 $data['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
             }
 
-            // Create the boarding house record
             $boardingHouse = BoardingHouse::create($data);
 
-            // Handle multiple photos
             if ($request->hasFile('photos')) {
                 foreach ($request->file('photos') as $photo) {
                     $photoPath = $photo->store('house_photos', 'public');
-                    // Create a new entry in the boarding_house_photos table
                     $boardingHouse->photos()->create(['photo_path' => $photoPath]);
                 }
             }
@@ -82,15 +82,19 @@ class BoardingHouseController extends Controller implements HasMiddleware
 
 
 
+
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        $boardinghouse = BoardingHouse::with(['reviews', 'photos', 'extraInfo'])->findOrFail($id);
+        $boardinghouse = BoardingHouse::with(['photos', 'extraInfo'])->findOrFail($id);
+
+        $reviews = $boardinghouse->reviews()->paginate(5);
 
         return view('boardinghouses.info', [
-            'boardinghouse' => $boardinghouse
+            'boardinghouse' => $boardinghouse,
+            'reviews' => $reviews,
         ]);
     }
 

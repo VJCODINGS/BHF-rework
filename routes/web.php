@@ -3,6 +3,7 @@
 use App\Http\Controllers\BoardingHouseController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::post('/users/{id}', [UserController::class, 'update'])->name('users.update');
     // Route::delete('/roles', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+    //comments and ratings
+    Route::post('/boarding-houses/{boardingHouse}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
 require __DIR__.'/auth.php';

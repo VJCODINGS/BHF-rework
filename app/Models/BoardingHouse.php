@@ -10,8 +10,14 @@ class BoardingHouse extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'address', 'maplink', 'policies', 'curfew',
-        'gender', 'profile_picture'
+        'name',
+        'address',
+        'maplink',
+        'description',
+        'policies',
+        'gender',
+        'profile_picture',
+        'user_id'
     ];
 
     public function reviews() {
@@ -24,5 +30,20 @@ class BoardingHouse extends Model
 
     public function extraInfo() {
         return $this->hasOne(HouseExtraInfo::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->reviews()->avg('rating');
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

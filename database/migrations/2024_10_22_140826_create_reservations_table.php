@@ -11,19 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('boarding_houses', function (Blueprint $table) {
+        Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('name');
-            $table->text('address');
-            $table->text('maplink')->nullable();
-            $table->longText('description')->nullable();
-            $table->longText('policies')->nullable();
-            $table->enum('gender', ['male only', 'female only', 'male and female']);
-            $table->string('profile_picture')->nullable();
+            $table->foreignId('boarding_house_id')->constrained()->onDelete('cascade');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('contact_number');
+            $table->string('email');
+            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('boarding_houses');
+        Schema::dropIfExists('reservations');
     }
 };

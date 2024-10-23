@@ -7,23 +7,27 @@
 
     <div class="py-12 bg-gray-100">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow-lg rounded-lg p-8">
+            <div class="bg-white shadow-lg rounded-lg p-4">
 
                 <div class="flex flex-col md:flex-row justify-between md:space-x-2 space-y-6 md:space-y-0 mb-2">
                     <x-profile-picture :boardinghouse="$boardinghouse" />
                     <x-basic-info :boardinghouse="$boardinghouse" />
                 </div>
 
-                <x-photos-section :boardinghouse="$boardinghouse" />
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="flex-1">
+                        <x-house-description :boardinghouse="$boardinghouse"/>
+                        <x-house-policies :boardinghouse="$boardinghouse" />
+                    </div>
 
-                <x-extra-info :boardinghouse="$boardinghouse" />
+                    <div class="flex-none w-full md:w-80">
+                        <x-house-map :boardinghouse="$boardinghouse"/>
+                    </div>
+                </div>
 
-                <x-house-details :boardinghouse="$boardinghouse" />
+                <x-comment-form :boardinghouse="$boardinghouse"/>
 
-                <x-reviews-section :boardinghouse="$boardinghouse" />
-
-                <x-comment-form />
-
+                <x-reviews-section :boardinghouse="$boardinghouse" :reviews="$reviews" />
             </div>
         </div>
     </div>
